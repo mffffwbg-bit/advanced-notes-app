@@ -1,13 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 
 function App() {
-  const [notes, setNotes] = useState([]);
+  const [notes, setNotes] = useState(() => {
+    const savedNotes = localStorage.getItem('react-notes-app-data');
+    return savedNotes ? JSON.parse(savedNotes) : [];
+  });
+
   const [noteText, setNoteText] = useState('');
   const [noteTitle, setNoteTitle] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('Personal');
 
   const categories = ['Personal', 'Work', 'Ideas', 'Todo'];
+
+  useEffect(() => {
+    localStorage.setItem('react-notes-app-data', JSON.stringify(notes));
+  }, [notes]);
 
   const addNote = () => {
     if (noteTitle.trim() === '' || noteText.trim() === '') {
